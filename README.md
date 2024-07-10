@@ -9,7 +9,7 @@ due to cors errors this package is not working on the browser but it works on no
 **THIS PACKAGE IS NOT ASSOCIATED WITH WE TELECOM EGYPT IN ANY WAY, SHAPE OR FORM WHATSO EVER** <br />
 **IT JUST BASED ON THE PUBLIC API THAT "WE TE" PROVIDES ON THERE WEBSITE** <br/>
 
-**هذه المشروع ليس له اي علاقة نهائيا بشركة we**<br />
+**هذا المشروع ليس له اي علاقة نهائيا بشركة we**<br />
 **المشروع ببساطة مبني علي الapi المتاح من خلال موقع we فقط وليس لwe اي علاقة بهاذا المشروع** <br/>
 ⚠️⚠️⚠️⚠️⚠️⚠️⚠️<br/>
 
@@ -26,32 +26,47 @@ yarn add we.api
 # Usage
 
 ```javascript
-const { WeApi } = require('we.api')
+const { WeApi, WeApiError } = require('we.api')
 
 const main = async (number, password) => {
-   const session = await WeApi.userAuthenticate(number, password)
-   const balance = await WeApi.getBalance(session)
-   const quota = await WeApi.getFreeUnits(session)
+   try {
+      const session = await WeApi.userAuthenticate(number, password)
+      const balance = await WeApi.getBalance(session)
+      const quota = await WeApi.getFreeUnits(session)
 
-   console.log(JSON.stringify(session, null, 2))
-   console.log(JSON.stringify(balance, null, 2))
-   console.log(JSON.stringify(quota, null, 2))
+      console.log(JSON.stringify(session, null, 2))
+      console.log(JSON.stringify(balance, null, 2))
+      console.log(JSON.stringify(quota, null, 2))
+   } catch (error) {
+      if (error instanceof WeApiError) {
+         return console.log('We Api Error:', error.message)
+      }
+
+      console.log('Error:', error.message)
+   }
 }
 
 main(process.argv[2], process.argv[3])
 ```
 
 # Todo List
-- [x] userAuthenticate - login user with phone number and password
-- [x] getBalance - get user balance
-- [x] getBalanceInfo - get user balance info
-- [ ] checkIfCanRenew - check if user can renew his main subscription
-- [ ] renewMainSubscription - renew user main subscription
-- [ ] ApiCashing version
 
-# Methods
+-  [x] userAuthenticate - login user with phone number and password
+-  [x] getBalance - get user balance
+-  [x] getBalanceInfo - get user balance info
+-  [ ] checkIfCanRenew - check if user can renew his main subscription
+-  [ ] renewMainSubscription - renew user main subscription
+-  [ ] ApiCashing version
 
-## userAuthenticate
+# Api
+
+## WeApi (class)
+
+```javascript
+const { WeApi } = require('we.api')
+```
+
+### WeApi.userAuthenticate
 
 `WeApi.userAuthenticate(number: string, password: string): Promise<Session>`
 
@@ -64,9 +79,10 @@ const session = await WeApi.userAuthenticate(number, password)
 | number    | string | yes      | 0223123456 | It can be in any valid Egyptian landline number <br>ex: +20223123456, 0020223123456,+20-2-2312-3456, 68-312-3456, 02-2312-3456<br>any Egyptian number that can be parsed with [libphonenumber-js](https://www.npmjs.com/package/libphonenumber-js) is valid<br>you can check the logic behind it in [phoneParser.js](https://github.com/abdelrahman-tarek-0/we.api/blob/master/lib/utils/phoneParser.js) |
 | password  | string | yes      | myPassword | Your WE TE account password (this is not being stored, sent, or modified in any sort)                                                                                                                                                                                                                                                                                                                    |
 
-return: Promise<[Session](#userresponse-session)>
+Return: Promise<[Session](#userresponse-session)> <br />
+Errors: [Possible Errors](#error-codes) <br />
 
-## getBalance
+### WeApi.getBalance
 
 `WeApi.getBalance(session: Session): Promise<UserBalanceInfo>`
 
@@ -74,13 +90,14 @@ return: Promise<[Session](#userresponse-session)>
 const balance = await WeApi.getBalance(session)
 ```
 
-| parameter | type   | required | example | note |
-| --------- | ------ | -------- | ------- | ---- |
-| session   | [Session](#userresponse-session) | yes      |         | only parts needed from the [Session](#userresponse-session) Object not all <br />  for more details check the input from more info check the method input [here](https://github.com/abdelrahman-tarek-0/we.api/blob/master/lib/api.js#L79)  |
+| parameter | type                             | required | example | note                                                                                                                                                                                                                                      |
+| --------- | -------------------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| session   | [Session](#userresponse-session) | yes      |         | only parts needed from the [Session](#userresponse-session) Object not all <br /> for more details check the input from more info check the method input [here](https://github.com/abdelrahman-tarek-0/we.api/blob/master/lib/api.js#L79) |
 
-return: Promise<[UserBalanceInfo](#userbalanceinfo)>
+Return: Promise<[UserBalanceInfo](#userbalanceinfo)><br />
+Errors: [Possible Errors](#error-codes) <br />
 
-## getFreeUnits
+### WeApi.getFreeUnits
 
 `WeApi.getFreeUnits(session: Session): Promise<FreeUnit[]>`
 
@@ -88,15 +105,56 @@ return: Promise<[UserBalanceInfo](#userbalanceinfo)>
 const quota = await WeApi.getFreeUnits(session)
 ```
 
-| parameter | type   | required | example | note |
-| --------- | ------ | -------- | ------- | ---- |
-| session   | [Session](#userresponse-session) | yes      |         | only parts needed from the [Session](#userresponse-session) Object not all <br />  for more details check the input from more info check the method input [here](
+| parameter | type                             | required | example | note                                                                                                                                                             |
+| --------- | -------------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| session   | [Session](#userresponse-session) | yes      |         | only parts needed from the [Session](#userresponse-session) Object not all <br /> for more details check the input from more info check the method input [here]( |
 
-return: Promise<[FreeUnit](#freeunit)[]>
+Return: Promise<[FreeUnit](#freeunit)[]> <br />
+Errors: [Possible Errors](#error-codes) <br />
+
+## WeApiError (class) inherits from Error
+
+```javascript
+const { WeApiError } = require('we.api')
+```
+
+-  has the same properties as the Error class
+-  has an additional property `code` which is the error code
+-  has `name` property set to `WeApiError`
+
+# Error Codes
+
+Accessed by [WeApiError](#weapierror-class-inherits-from-error) instances error.code
+
+```javascript
+const { WeApiError } = require('we.api')
+
+try {
+   // some code
+} catch (error) {
+   if (error instanceof WeApiError) {
+      console.log('We Api Error:', error.message)
+      console.log('We Api Error Code:', error.code)
+   }
+   //or
+
+   if (error.name === 'WeApiError') {
+      console.log('We Api Error:', error.message)
+      console.log('We Api Error Code:', error.code)
+   }
+}
+```
+
+-  WE_INVALID_CREDENTIALS
+-  WE_INVALID_SESSION
+-  WE_INVALID_PHONE_NUMBER
+-  WE_INVALID_RESPONSE
+-  WE_RATE_LIMITED
+-  WE_SERVER_ERROR
 
 # types
 
-## IndividualInfo
+### IndividualInfo
 
 <pre>
 /**
@@ -109,7 +167,7 @@ return: Promise<[FreeUnit](#freeunit)[]>
 */
 </pre>
 
-## Customer
+### Customer
 
 <pre>
 /**
@@ -128,7 +186,7 @@ return: Promise<[FreeUnit](#freeunit)[]>
 */
 </pre>
 
-## Account
+### Account
 
 <pre>
 /**
@@ -139,7 +197,7 @@ return: Promise<[FreeUnit](#freeunit)[]>
  */
 </pre>
 
-## Subscriber
+### Subscriber
 
 <pre>
 /**
@@ -164,7 +222,7 @@ return: Promise<[FreeUnit](#freeunit)[]>
  */
 </pre>
 
-## UserResponse (session)
+### UserResponse (session)
 
 <pre>
 /**
@@ -182,7 +240,7 @@ return: Promise<[FreeUnit](#freeunit)[]>
  */
 </pre>
 
-## BalanceDetail
+### BalanceDetail
 
 <pre>
 /**
@@ -195,7 +253,7 @@ return: Promise<[FreeUnit](#freeunit)[]>
  */
 </pre>
 
-## BalanceInfo
+### BalanceInfo
 
 <pre>
 /**
@@ -210,7 +268,7 @@ return: Promise<[FreeUnit](#freeunit)[]>
  */
 </pre>
 
-## CreditInfo
+### CreditInfo
 
 <pre>
 /**
@@ -222,7 +280,7 @@ return: Promise<[FreeUnit](#freeunit)[]>
  */
 </pre>
 
-## UserBalanceInfo
+### UserBalanceInfo
 
 <pre>
 /**
@@ -234,7 +292,8 @@ return: Promise<[FreeUnit](#freeunit)[]>
  */
 </pre>
 
-## FreeUnitBeanDetail
+### FreeUnitBeanDetail
+
 <pre>
 /**
  * @typedef {Object} FreeUnitBeanDetail
@@ -253,7 +312,8 @@ return: Promise<[FreeUnit](#freeunit)[]>
  */
 </pre>
 
-## FreeUnit
+### FreeUnit
+
 <pre>
 /**
  * @typedef {Object} FreeUnit
