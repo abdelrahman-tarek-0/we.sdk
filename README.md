@@ -1,7 +1,9 @@
 # We Api
 
 we.api is an open source package for JavaScript that acts as an Api or an SDK for We Telecom Egypt (We TE) website <br />
-due to cors errors this package is not working on the browser but it works on nodejs
+_can only run in Egypt and with Node.js_ <br />
+i am aiming to make this package as robust as possible and to cover all the features that the website provides <br />
+please feel free to contribute to this project and make it better <br />
 
 # DECLAIMER
 
@@ -457,3 +459,11 @@ try {
  * @property {<a href="#freeunitbeandetail">FreeUnitBeanDetail</a>[]} freeUnitBeanDetailList - The list of free unit bean details.
  */
 </pre>
+
+# Contributing
+this project is open for contributions, feel free to open an issue or a pull request <br />
+you can complete the todo list or add new features, optimize the code, or fix bugs <br />
+make sure you write the code as clean as possible and add comments <br />
+
+# License
+MIT
