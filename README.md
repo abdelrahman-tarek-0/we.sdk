@@ -1,6 +1,6 @@
 # We Api
 
-we.api is an open source package for JavaScript that acts as an Api or an SDK for We Telecom Egypt (We TE) website <br />
+we.sdk is an open source package for JavaScript that acts as an Api or an SDK for We Telecom Egypt (We TE) website <br />
 _can only run in Egypt and with Node.js_ <br />
 i am aiming to make this package as robust as possible and to cover all the features that the website provides <br />
 please feel free to contribute to this project and make it better <br />
@@ -18,11 +18,11 @@ please feel free to contribute to this project and make it better <br />
 # Installation
 
 ```bash
-npm install we.api
+npm install we.sdk
 ```
 
 ```bash
-yarn add we.api
+yarn add we.sdk
 ```
 
 # Usage
@@ -33,7 +33,7 @@ there are two ways to use this package
 ## Normal API usage
 
 ```javascript
-const { WeApi, WeApiError } = require('we.api')
+const { WeApi, WeApiError } = require('we.sdk')
 
 const main = async (number, password) => {
    try {
@@ -57,7 +57,7 @@ main(process.argv[2], process.argv[3])
 ## Cached API usage
 
 ````javascript
-const { WeCachedApi, WeApiError, CacheProviderInMemory, CacheProviderInFile } = require('we.api')
+const { WeCachedApi, WeApiError, CacheProviderInMemory, CacheProviderInFile } = require('we.sdk')
 
 const main = async (number, password) => {
    try {
@@ -113,7 +113,7 @@ const main = async (number, password) => {
 ## WeApi (class)
 
 ```javascript
-const { WeApi } = require('we.api')
+const { WeApi } = require('we.sdk')
 ```
 
 ### WeApi.userAuthenticate
@@ -126,7 +126,7 @@ const session = await WeApi.userAuthenticate(number, password)
 
 | parameter | type   | required | example    | note                                                                                                                                                                                                                                                                                                                                                                                                     |
 | --------- | ------ | -------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| number    | string | yes      | 0223123456 | It can be in any valid Egyptian landline number <br>ex: +20223123456, 0020223123456,+20-2-2312-3456, 68-312-3456, 02-2312-3456<br>any Egyptian number that can be parsed with [libphonenumber-js](https://www.npmjs.com/package/libphonenumber-js) is valid<br>you can check the logic behind it in [phoneParser.js](https://github.com/abdelrahman-tarek-0/we.api/blob/master/lib/utils/phoneParser.js) |
+| number    | string | yes      | 0223123456 | It can be in any valid Egyptian landline number <br>ex: +20223123456, 0020223123456,+20-2-2312-3456, 68-312-3456, 02-2312-3456<br>any Egyptian number that can be parsed with [libphonenumber-js](https://www.npmjs.com/package/libphonenumber-js) is valid<br>you can check the logic behind it in [phoneParser.js](https://github.com/abdelrahman-tarek-0/we.sdk/blob/master/lib/utils/phoneParser.js) |
 | password  | string | yes      | myPassword | Your WE TE account password (this is not being stored, sent, or modified in any sort)                                                                                                                                                                                                                                                                                                                    |
 
 Return: Promise<[Session](#userresponse-session)> <br />
@@ -142,7 +142,7 @@ const balance = await WeApi.getBalance(session)
 
 | parameter | type                             | required | example | note                                                                                                                                                                                                                                      |
 | --------- | -------------------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| session   | [Session](#userresponse-session) | yes      |         | only parts needed from the [Session](#userresponse-session) Object not all <br /> for more details check the input from more info check the method input [here](https://github.com/abdelrahman-tarek-0/we.api/blob/master/lib/api.js#L79) |
+| session   | [Session](#userresponse-session) | yes      |         | only parts needed from the [Session](#userresponse-session) Object not all <br /> for more details check the input from more info check the method input [here](https://github.com/abdelrahman-tarek-0/we.sdk/blob/master/lib/api.js#L79) |
 
 Return: Promise<[UserBalanceInfo](#userbalanceinfo)><br />
 Errors: [Possible Errors](#error-codes) <br />
@@ -157,7 +157,7 @@ const quota = await WeApi.getFreeUnits(session)
 
 | parameter | type                             | required | example | note                                                                                                                                                                                                                                       |
 | --------- | -------------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| session   | [Session](#userresponse-session) | yes      |         | only parts needed from the [Session](#userresponse-session) Object not all <br /> for more details check the input from more info check the method input [here](https://github.com/abdelrahman-tarek-0/we.api/blob/master/lib/api.js#L120) |
+| session   | [Session](#userresponse-session) | yes      |         | only parts needed from the [Session](#userresponse-session) Object not all <br /> for more details check the input from more info check the method input [here](https://github.com/abdelrahman-tarek-0/we.sdk/blob/master/lib/api.js#L120) |
 
 Return: Promise<[FreeUnit](#freeunit)[]> <br />
 Errors: [Possible Errors](#error-codes) <br />
@@ -165,7 +165,7 @@ Errors: [Possible Errors](#error-codes) <br />
 ## WeCachedApi (class)
 
 ```javascript
-const { WeCachedApi } = require('we.api')
+const { WeCachedApi } = require('we.sdk')
 ```
 
 ### WeCachedApi.constructor
@@ -200,7 +200,7 @@ const WeCachedApi = new WeCachedApi({
 | ------------ | ------ | -------- | ------- | ---- |
 | options      | object | yes      |         |      |
 | customer     | object | yes      |         |      |
-| customer.number | string | yes | 0223123456 | It can be in any valid Egyptian landline number <br>ex: +20223123456, 0020223123456,+20-2-2312-3456, 68-312-3456, 02-2312-3456<br>any Egyptian number that can be parsed with [libphonenumber-js](https://www.npmjs.com/package/libphonenumber-js) is valid<br>you can check the logic behind it in [phoneParser.js](https://github.com/abdelrahman-tarek-0/we.api/blob/master/lib/utils/phoneParser.js) |
+| customer.number | string | yes | 0223123456 | It can be in any valid Egyptian landline number <br>ex: +20223123456, 0020223123456,+20-2-2312-3456, 68-312-3456, 02-2312-3456<br>any Egyptian number that can be parsed with [libphonenumber-js](https://www.npmjs.com/package/libphonenumber-js) is valid<br>you can check the logic behind it in [phoneParser.js](https://github.com/abdelrahman-tarek-0/we.sdk/blob/master/lib/utils/phoneParser.js) |
 | customer.password | string | yes | myPassword | Your WE TE account password (this is not being stored, sent, or modified in any sort) |
 | CacheProvider | class | no, default: CacheProviderInMemory  | CacheProviderInFile or CacheProviderInMemory | the class that will be used to cache the data you can create your own cache provider by extending the [CacheProviderInterface](#cacheproviderinterface-interface) and implementing the methods |
 | cachePath | string | no, default: './cache.json' | './cache.json' | only needed if you are using CacheProviderInFile |
@@ -214,7 +214,7 @@ the same as [WeApi](#weapi-class) but with caching
 used as a cache provider for the [WeCachedApi](#wecachedapi-class) class
 
 ```javascript
-const { CacheProviderInMemory } = require('we.api')
+const { CacheProviderInMemory } = require('we.sdk')
 ```
 
 ## CacheProviderInFile (class)
@@ -222,14 +222,14 @@ used as a cache provider for the [WeCachedApi](#wecachedapi-class) class <br />
 requires the `cachePath` parameter in the [WeCachedApi.constructor](#wecachedapiconstructor)
 
 ```javascript
-const { CacheProviderInFile } = require('we.api')
+const { CacheProviderInFile } = require('we.sdk')
 ```
 
 ## CacheProviderInterface (interface)
 used to create your own cache provider for the [WeCachedApi](#wecachedapi-class) class
 
 ```javascript
-const { CacheProviderInterface } = require('we.api')
+const { CacheProviderInterface } = require('we.sdk')
 ```
 
 
@@ -237,7 +237,7 @@ const { CacheProviderInterface } = require('we.api')
 ## WeApiError (class) inherits from Error
 
 ```javascript
-const { WeApiError } = require('we.api')
+const { WeApiError } = require('we.sdk')
 ```
 
 -  has the same properties as the Error class
@@ -249,7 +249,7 @@ const { WeApiError } = require('we.api')
 Accessed by [WeApiError](#weapierror-class-inherits-from-error) instances error.code
 
 ```javascript
-const { WeApiError } = require('we.api')
+const { WeApiError } = require('we.sdk')
 
 try {
    // some code

@@ -1,5 +1,5 @@
 {
-  "name": "we.api",
+  "name": "we.sdk",
   "version": "0.0.1",
   "description": "providing node js interface for controlling, fetching, and modifying your account and quota on the We Telecom Egypt website \n I am shooting to make a complete \"We SDK\" for node js ",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abdelrahman-tarek-0/we.api.git"
+    "url": "git+https://github.com/abdelrahman-tarek-0/we.sdk.git"
   },
   "keywords": [
     "egypt",
@@ -23,9 +23,9 @@
   "author": "https://github.com/abdelrahman-tarek-0",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/abdelrahman-tarek-0/we.api/issues"
+    "url": "https://github.com/abdelrahman-tarek-0/we.sdk/issues"
   },
-  "homepage": "https://github.com/abdelrahman-tarek-0/we.api#readme",
+  "homepage": "https://github.com/abdelrahman-tarek-0/we.sdki#readme",
   "dependencies": {
     "axios": "^1.7.2",
     "libphonenumber-js": "^1.11.4"
