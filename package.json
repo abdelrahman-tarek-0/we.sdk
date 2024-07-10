@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/abdelrahman-tarek-0/we.api#readme",
   "dependencies": {
-    "axios": "^1.7.2"
+    "axios": "^1.7.2",
+    "libphonenumber-js": "^1.11.4"
   }
 }
