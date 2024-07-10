@@ -24,6 +24,11 @@ yarn add we.api
 ```
 
 # Usage
+there are two ways to use this package
+1. only using the plain api
+2. using the cached api (recommended and optimized)
+
+## Normal API usage
 
 ```javascript
 const { WeApi, WeApiError } = require('we.api')
@@ -41,13 +46,56 @@ const main = async (number, password) => {
       if (error instanceof WeApiError) {
          return console.log('We Api Error:', error.message)
       }
-
-      console.log('Error:', error.message)
    }
 }
 
 main(process.argv[2], process.argv[3])
 ```
+
+## Cached API usage
+
+````javascript
+const { WeCachedApi, WeApiError, CacheProviderInMemory, CacheProviderInFile } = require('we.api')
+
+const main = async (number, password) => {
+   try {
+      const WeCachedApi = new WeCachedApi({
+         customer: {
+            number: number,
+            password: password,
+         },
+         CashProvider: CacheProviderInFile, // or CacheProviderInMemory
+         cashPath: './cash.json', // only needed if you are using CacheProviderInFile
+         ttlInMs: {
+            session: 3.5 * 60 * 60 * 1000, // 3.5 hours before the session expires in the cash
+            balance: 10 * 60 * 1000, // 10 minutes before the balance expires
+            freeUnit: 10 * 60 * 1000, // 10 minutes before the freeUnit expires
+         },
+         hooks: {
+            beforeRequest: (key) => {
+               console.log('beforeRequest', key) // will be called before the request if not cached
+            },
+            afterRequest: (key) => {
+               console.log('afterRequest', key) // will be called after the request if not cached
+            },
+         },
+      })
+
+      const session = await WeCachedApi.userAuthenticate()
+      const balance = await WeCachedApi.getBalance() // if session is not cached it will call userAuthenticate first
+      const quota = await WeCachedApi.getFreeUnits() // if session is not cached it will call userAuthenticate first
+
+      console.log(JSON.stringify(session, null, 2))
+      console.log(JSON.stringify(balance, null, 2))
+      console.log(JSON.stringify(quota, null, 2))
+   } catch (error) {
+      if (error instanceof WeApiError) {
+         return console.log('We Api Error:', error.message)
+      }
+   }
+}
+````
+
 
 # Todo List
 
@@ -105,12 +153,84 @@ Errors: [Possible Errors](#error-codes) <br />
 const quota = await WeApi.getFreeUnits(session)
 ```
 
-| parameter | type                             | required | example | note                                                                                                                                                             |
-| --------- | -------------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| parameter | type                             | required | example | note                                                                                                                                                                                                                                       |
+| --------- | -------------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | session   | [Session](#userresponse-session) | yes      |         | only parts needed from the [Session](#userresponse-session) Object not all <br /> for more details check the input from more info check the method input [here](https://github.com/abdelrahman-tarek-0/we.api/blob/master/lib/api.js#L120) |
 
 Return: Promise<[FreeUnit](#freeunit)[]> <br />
 Errors: [Possible Errors](#error-codes) <br />
+
+## WeCachedApi (class)
+
+```javascript
+const { WeCachedApi } = require('we.api')
+```
+
+### WeCachedApi.constructor
+
+`new WeCachedApi(options: object)`
+
+```javascript
+const WeCachedApi = new WeCachedApi({
+   customer: {
+      number: number,
+      password: password,
+   },
+   CashProvider: CacheProviderInFile, // or CacheProviderInMemory
+   cashPath: './cash.json', // only needed if you are using CacheProviderInFile
+   ttlInMs: {
+      session: 3.5 * 60 * 60 * 1000, // 3.5 hours before the session expires in the cash
+      balance: 10 * 60 * 1000, // 10 minutes before the balance expires
+      freeUnit: 10 * 60 * 1000, // 10 minutes before the freeUnit expires
+   },
+   hooks: {
+      beforeRequest: (key) => {
+         console.log('beforeRequest', key) // will be called before the request if not cached
+      },
+      afterRequest: (key) => {
+         console.log('afterRequest', key) // will be called after the request if not cached
+      },
+   },
+})
+```
+
+| parameter    | type   | required | example | note |
+| ------------ | ------ | -------- | ------- | ---- |
+| options      | object | yes      |         |      |
+| customer     | object | yes      |         |      |
+| customer.number | string | yes | 0223123456 | It can be in any valid Egyptian landline number <br>ex: +20223123456, 0020223123456,+20-2-2312-3456, 68-312-3456, 02-2312-3456<br>any Egyptian number that can be parsed with [libphonenumber-js](https://www.npmjs.com/package/libphonenumber-js) is valid<br>you can check the logic behind it in [phoneParser.js](https://github.com/abdelrahman-tarek-0/we.api/blob/master/lib/utils/phoneParser.js) |
+| customer.password | string | yes | myPassword | Your WE TE account password (this is not being stored, sent, or modified in any sort) |
+| CashProvider | class | no, default: CacheProviderInMemory  | CacheProviderInFile or CacheProviderInMemory | the class that will be used to cache the data you can create your own cache provider by extending the [CacheProviderInterface](#cacheproviderinterface-interface) and implementing the methods |
+| cashPath | string | no, default: './cash.json' | './cash.json' | only needed if you are using CacheProviderInFile |
+| ttlInMs | object | no, default: { session: 3.5 * 60 * 60 * 1000, balance: 10 * 60 * 1000, freeUnit: 10 * 60 * 1000 } | { session: 3.5 * 60 * 60 * 1000, balance: 10 * 60 * 1000, freeUnit: 10 * 60 * 1000 } | the time to live for each cached item in milliseconds |
+| hooks | object | no | | hooks that will be called before and after the request if not cached |
+
+### WeCachedApi.*
+the same as [WeApi](#weapi-class) but with caching
+
+## CacheProviderInMemory (class)
+used as a cache provider for the [WeCachedApi](#wecachedapi-class) class
+
+```javascript
+const { CacheProviderInMemory } = require('we.api')
+```
+
+## CacheProviderInFile (class)
+used as a cache provider for the [WeCachedApi](#wecachedapi-class) class <br />
+requires the `cashPath` parameter in the [WeCachedApi.constructor](#wecachedapiconstructor)
+
+```javascript
+const { CacheProviderInFile } = require('we.api')
+```
+
+## CacheProviderInterface (interface)
+used to create your own cache provider for the [WeCachedApi](#wecachedapi-class) class
+
+```javascript
+const { CacheProviderInterface } = require('we.api')
+```
+
+
 
 ## WeApiError (class) inherits from Error
 
@@ -151,6 +271,7 @@ try {
 -  WE_INVALID_RESPONSE
 -  WE_RATE_LIMITED
 -  WE_SERVER_ERROR
+-  WE_INVALID_CACHE_PROVIDER
 
 # types
 
