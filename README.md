@@ -107,7 +107,7 @@ const quota = await WeApi.getFreeUnits(session)
 
 | parameter | type                             | required | example | note                                                                                                                                                             |
 | --------- | -------------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| session   | [Session](#userresponse-session) | yes      |         | only parts needed from the [Session](#userresponse-session) Object not all <br /> for more details check the input from more info check the method input [here]( |
+| session   | [Session](#userresponse-session) | yes      |         | only parts needed from the [Session](#userresponse-session) Object not all <br /> for more details check the input from more info check the method input [here](https://github.com/abdelrahman-tarek-0/we.api/blob/master/lib/api.js#L120) |
 
 Return: Promise<[FreeUnit](#freeunit)[]> <br />
 Errors: [Possible Errors](#error-codes) <br />
