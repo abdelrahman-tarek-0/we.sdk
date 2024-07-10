@@ -59,15 +59,15 @@ const { WeCachedApi, WeApiError, CacheProviderInMemory, CacheProviderInFile } = 
 
 const main = async (number, password) => {
    try {
-      const WeCachedApi = new WeCachedApi({
+      const weCachedApi = new WeCachedApi({
          customer: {
             number: number,
             password: password,
          },
-         CashProvider: CacheProviderInFile, // or CacheProviderInMemory
-         cashPath: './cash.json', // only needed if you are using CacheProviderInFile
+         CacheProvider: CacheProviderInFile, // or CacheProviderInMemory
+         cachePath: './cache.json', // only needed if you are using CacheProviderInFile
          ttlInMs: {
-            session: 3.5 * 60 * 60 * 1000, // 3.5 hours before the session expires in the cash
+            session: 3.5 * 60 * 60 * 1000, // 3.5 hours before the session expires
             balance: 10 * 60 * 1000, // 10 minutes before the balance expires
             freeUnit: 10 * 60 * 1000, // 10 minutes before the freeUnit expires
          },
@@ -81,9 +81,9 @@ const main = async (number, password) => {
          },
       })
 
-      const session = await WeCachedApi.userAuthenticate()
-      const balance = await WeCachedApi.getBalance() // if session is not cached it will call userAuthenticate first
-      const quota = await WeCachedApi.getFreeUnits() // if session is not cached it will call userAuthenticate first
+      const session = await weCachedApi.userAuthenticate()
+      const balance = await weCachedApi.getBalance() // if session is not cached it will call userAuthenticate first
+      const quota = await weCachedApi.getFreeUnits() // if session is not cached it will call userAuthenticate first
 
       console.log(JSON.stringify(session, null, 2))
       console.log(JSON.stringify(balance, null, 2))
@@ -104,7 +104,7 @@ const main = async (number, password) => {
 -  [x] getBalanceInfo - get user balance info
 -  [ ] checkIfCanRenew - check if user can renew his main subscription
 -  [ ] renewMainSubscription - renew user main subscription
--  [ ] ApiCashing version
+-  [x] ApiCaching version
 
 # Api
 
@@ -176,10 +176,10 @@ const WeCachedApi = new WeCachedApi({
       number: number,
       password: password,
    },
-   CashProvider: CacheProviderInFile, // or CacheProviderInMemory
-   cashPath: './cash.json', // only needed if you are using CacheProviderInFile
+   CacheProvider: CacheProviderInFile, // or CacheProviderInMemory
+   cachePath: './cache.json', // only needed if you are using CacheProviderInFile
    ttlInMs: {
-      session: 3.5 * 60 * 60 * 1000, // 3.5 hours before the session expires in the cash
+      session: 3.5 * 60 * 60 * 1000, // 3.5 hours before the session expires
       balance: 10 * 60 * 1000, // 10 minutes before the balance expires
       freeUnit: 10 * 60 * 1000, // 10 minutes before the freeUnit expires
    },
@@ -200,8 +200,8 @@ const WeCachedApi = new WeCachedApi({
 | customer     | object | yes      |         |      |
 | customer.number | string | yes | 0223123456 | It can be in any valid Egyptian landline number <br>ex: +20223123456, 0020223123456,+20-2-2312-3456, 68-312-3456, 02-2312-3456<br>any Egyptian number that can be parsed with [libphonenumber-js](https://www.npmjs.com/package/libphonenumber-js) is valid<br>you can check the logic behind it in [phoneParser.js](https://github.com/abdelrahman-tarek-0/we.api/blob/master/lib/utils/phoneParser.js) |
 | customer.password | string | yes | myPassword | Your WE TE account password (this is not being stored, sent, or modified in any sort) |
-| CashProvider | class | no, default: CacheProviderInMemory  | CacheProviderInFile or CacheProviderInMemory | the class that will be used to cache the data you can create your own cache provider by extending the [CacheProviderInterface](#cacheproviderinterface-interface) and implementing the methods |
-| cashPath | string | no, default: './cash.json' | './cash.json' | only needed if you are using CacheProviderInFile |
+| CacheProvider | class | no, default: CacheProviderInMemory  | CacheProviderInFile or CacheProviderInMemory | the class that will be used to cache the data you can create your own cache provider by extending the [CacheProviderInterface](#cacheproviderinterface-interface) and implementing the methods |
+| cachePath | string | no, default: './cache.json' | './cache.json' | only needed if you are using CacheProviderInFile |
 | ttlInMs | object | no, default: { session: 3.5 * 60 * 60 * 1000, balance: 10 * 60 * 1000, freeUnit: 10 * 60 * 1000 } | { session: 3.5 * 60 * 60 * 1000, balance: 10 * 60 * 1000, freeUnit: 10 * 60 * 1000 } | the time to live for each cached item in milliseconds |
 | hooks | object | no | | hooks that will be called before and after the request if not cached |
 
@@ -217,7 +217,7 @@ const { CacheProviderInMemory } = require('we.api')
 
 ## CacheProviderInFile (class)
 used as a cache provider for the [WeCachedApi](#wecachedapi-class) class <br />
-requires the `cashPath` parameter in the [WeCachedApi.constructor](#wecachedapiconstructor)
+requires the `cachePath` parameter in the [WeCachedApi.constructor](#wecachedapiconstructor)
 
 ```javascript
 const { CacheProviderInFile } = require('we.api')
