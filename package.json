@@ -1,0 +1,32 @@
+{
+  "name": "we.api",
+  "version": "0.0.1",
+  "description": "providing node js interface for controlling, fetching, and modifying your account and quota on the We Telecom Egypt website \n I am shooting to make a complete \"We SDK\" for node js ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo test",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdelrahman-tarek-0/we.api.git"
+  },
+  "keywords": [
+    "egypt",
+    "API",
+    "Telecom",
+    "TelecomEgypt",
+    "internet",
+    "we",
+    "sdk"
+  ],
+  "author": "https://github.com/abdelrahman-tarek-0",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abdelrahman-tarek-0/we.api/issues"
+  },
+  "homepage": "https://github.com/abdelrahman-tarek-0/we.api#readme",
+  "dependencies": {
+    "axios": "^1.7.2"
+  }
+}
