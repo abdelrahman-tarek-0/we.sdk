@@ -1,4 +1,4 @@
-declare class WeApi {
+export class WeApi {
     /**
      * Authenticate user with WE API.
      * @example
@@ -40,7 +40,7 @@ declare class WeApi {
     }): Promise<FreeUnit[]>;
 }
 
-declare class WeCachedApi {
+export class WeCachedApi {
     constructor(config: Config);
     /**
      * @returns session object
@@ -60,7 +60,7 @@ declare class WeCachedApi {
  * Base interface for cache providers.
  * @param path - location of the cashed file in json format
  */
-declare interface CacheProviderInterface {
+export interface CacheProviderInterface {
     set(key: string, value: any): any;
     get(key: string): any;
     remove(key: string): this;
@@ -68,13 +68,13 @@ declare interface CacheProviderInterface {
     validateKey(key: string): boolean;
 }
 
-declare interface CacheProviderInFile extends CacheProviderInterface {
+export interface CacheProviderInFile extends CacheProviderInterface {
 }
 
 /**
  * @param path - location of the cashed file in json format
  */
-declare class CacheProviderInFile implements CacheProviderInterface {
+export class CacheProviderInFile implements CacheProviderInterface {
     constructor(ttl: TTLInMs, path: string);
     set(key: string, value: any): any;
     get(key: string): any;
@@ -83,10 +83,10 @@ declare class CacheProviderInFile implements CacheProviderInterface {
     validateKey(key: string): boolean;
 }
 
-declare interface CacheProviderInMemory extends CacheProviderInterface {
+export interface CacheProviderInMemory extends CacheProviderInterface {
 }
 
-declare class CacheProviderInMemory implements CacheProviderInterface {
+export class CacheProviderInMemory implements CacheProviderInterface {
     constructor(ttl: TTLInMs);
     set(key: string, value: any): any;
     get(key: string): any;
@@ -102,7 +102,7 @@ declare class CacheProviderInMemory implements CacheProviderInterface {
  * @property nationality - The individual's nationality.
  * @property birthday - The individual's birthday timestamp.
  */
-declare type IndividualInfo = {
+export type IndividualInfo = {
     firstName: string;
     lastName: string;
     gender: string;
@@ -123,7 +123,7 @@ declare type IndividualInfo = {
  * @property serviceManagerInfo - The service manager information.
  * @property bankCards - The list of bank cards.
  */
-declare type Customer = {
+export type Customer = {
     custId: string;
     custName: string;
     custGender: string;
@@ -142,7 +142,7 @@ declare type Customer = {
  * @property acctCode - The account code.
  * @property billCycle - The billing cycle information.
  */
-declare type Account = {
+export type Account = {
     acctId: string;
     acctCode: string;
     billCycle: any[];
@@ -167,7 +167,7 @@ declare type Account = {
  * @property dataRoaming - The data roaming status.
  * @property isDelegatorSubs - The delegator subscription status.
  */
-declare type Subscriber = {
+export type Subscriber = {
     subscriberId: string;
     custId: string;
     accountId: string;
@@ -199,7 +199,7 @@ declare type Subscriber = {
  * @property subscriber - The subscriber information.
  * @property ownerList - The list of owners.
  */
-declare type UserResponse = {
+export type UserResponse = {
     utoken: string;
     loginId: string;
     loginType: string;
@@ -219,7 +219,7 @@ declare type UserResponse = {
  * @property effectiveTime - The effective time in milliseconds.
  * @property expireTime - The expire time in milliseconds.
  */
-declare type BalanceDetail = {
+export type BalanceDetail = {
     balanceInstanceId: string;
     amount: string;
     initialAmount: string;
@@ -236,7 +236,7 @@ declare type BalanceDetail = {
  * @property currencyId - The currency ID.
  * @property balanceDetail - The balance detail list.
  */
-declare type BalanceInfo = {
+export type BalanceInfo = {
     balanceType: string;
     balanceTypeName: string;
     totalAmount: string;
@@ -252,7 +252,7 @@ declare type BalanceInfo = {
  * @property totalRemainAmount - The total remain amount.
  * @property currencyId - The currency ID.
  */
-declare type CreditInfo = {
+export type CreditInfo = {
     totalCreditAmount: string;
     totalUsageAmount: string;
     totalRemainAmount: string;
@@ -265,53 +265,31 @@ declare type CreditInfo = {
  * @property creditInfo - The credit information.
  * @property outstandingInfo - The outstanding information.
  */
-declare type UserBalanceInfo = {
+export type UserBalanceInfo = {
     acctId: string;
     balanceInfo: BalanceInfo[];
     creditInfo: CreditInfo[];
     outstandingInfo: any[];
 };
 
-declare type Hooks = {
+export type Hooks = {
     beforeRequest: (...params: any[]) => any;
     afterRequest: (...params: any[]) => any;
 };
 
-declare type TTLInMs = {
+export type TTLInMs = {
     session: number;
     balance: number;
     freeUnit: number;
 };
 
-/**
- * @property custId - The customer ID.
- * @property custName - The customer name.
- * @property custGender - The customer gender.
- * @property custCode - The customer code.
- * @property custType - The customer type.
- * @property custClass - The customer class.
- * @property individualInfo - The individual's information.
- * @property contactPersonList - The list of contact persons.
- * @property addressInfoList - The list of addresses.
- * @property serviceManagerInfo - The service manager information.
- * @property bankCards - The list of bank cards.
- */
-declare type Customer = {
-    custId: string;
-    custName: string;
-    custGender: string;
-    custCode: string;
-    custType: string;
-    custClass: string;
-    individualInfo: IndividualInfo;
-    contactPersonList: any[];
-    addressInfoList: any[];
-    serviceManagerInfo: any[];
-    bankCards: any[];
+export type CustomerConfig = {
+    number: string;
+    password: string;
 };
 
-declare type Config = {
-    customer: Customer;
+export type Config = {
+    customer: CustomerConfig;
     ttlInMs: TTLInMs;
     CacheProvider: CacheProviderInFile | CacheProviderInMemory | CacheProviderInterface;
     cachePath: string;
@@ -332,7 +310,7 @@ declare type Config = {
  * @property itemCode - The item code.
  * @property remainingDaysForRenewal - The remaining days for renewal.
  */
-declare type FreeUnitBeanDetail = {
+export type FreeUnitBeanDetail = {
     initialAmount: number;
     currentAmount: number;
     measureUnit: string;
@@ -366,7 +344,7 @@ declare type FreeUnitBeanDetail = {
  * @property originUnit - The origin unit.
  * @property freeUnitBeanDetailList - The list of free unit bean details.
  */
-declare type FreeUnit = {
+export type FreeUnit = {
     tabId: string;
     freeUnitType: string;
     freeUnitTypeName: string;
