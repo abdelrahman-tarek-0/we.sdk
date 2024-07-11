@@ -53,7 +53,7 @@ export declare class WeCachedApi {
     /**
      * @returns free units
      */
-    getFreeUnits(): Promise<FreeUnit>;
+    getFreeUnits(): Promise<FreeUnit[]>;
 }
 
 /**
