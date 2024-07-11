@@ -1,4 +1,4 @@
-export class WeApi {
+export declare class WeApi {
     /**
      * Authenticate user with WE API.
      * @example
@@ -40,7 +40,7 @@ export class WeApi {
     }): Promise<FreeUnit[]>;
 }
 
-export class WeCachedApi {
+export declare class WeCachedApi {
     constructor(config: Config);
     /**
      * @returns session object
@@ -60,7 +60,7 @@ export class WeCachedApi {
  * Base interface for cache providers.
  * @param path - location of the cashed file in json format
  */
-export interface CacheProviderInterface {
+export declare interface CacheProviderInterface {
     set(key: string, value: any): any;
     get(key: string): any;
     remove(key: string): this;
@@ -68,13 +68,13 @@ export interface CacheProviderInterface {
     validateKey(key: string): boolean;
 }
 
-export interface CacheProviderInFile extends CacheProviderInterface {
+export declare interface CacheProviderInFile extends CacheProviderInterface {
 }
 
 /**
  * @param path - location of the cashed file in json format
  */
-export class CacheProviderInFile implements CacheProviderInterface {
+export declare class CacheProviderInFile implements CacheProviderInterface {
     constructor(ttl: TTLInMs, path: string);
     set(key: string, value: any): any;
     get(key: string): any;
@@ -83,10 +83,10 @@ export class CacheProviderInFile implements CacheProviderInterface {
     validateKey(key: string): boolean;
 }
 
-export interface CacheProviderInMemory extends CacheProviderInterface {
+export declare interface CacheProviderInMemory extends CacheProviderInterface {
 }
 
-export class CacheProviderInMemory implements CacheProviderInterface {
+export declare class CacheProviderInMemory implements CacheProviderInterface {
     constructor(ttl: TTLInMs);
     set(key: string, value: any): any;
     get(key: string): any;
@@ -102,7 +102,7 @@ export class CacheProviderInMemory implements CacheProviderInterface {
  * @property nationality - The individual's nationality.
  * @property birthday - The individual's birthday timestamp.
  */
-export type IndividualInfo = {
+export declare type IndividualInfo = {
     firstName: string;
     lastName: string;
     gender: string;
@@ -123,7 +123,7 @@ export type IndividualInfo = {
  * @property serviceManagerInfo - The service manager information.
  * @property bankCards - The list of bank cards.
  */
-export type Customer = {
+export declare type Customer = {
     custId: string;
     custName: string;
     custGender: string;
@@ -142,7 +142,7 @@ export type Customer = {
  * @property acctCode - The account code.
  * @property billCycle - The billing cycle information.
  */
-export type Account = {
+export declare type Account = {
     acctId: string;
     acctCode: string;
     billCycle: any[];
@@ -167,7 +167,7 @@ export type Account = {
  * @property dataRoaming - The data roaming status.
  * @property isDelegatorSubs - The delegator subscription status.
  */
-export type Subscriber = {
+export declare type Subscriber = {
     subscriberId: string;
     custId: string;
     accountId: string;
@@ -199,7 +199,7 @@ export type Subscriber = {
  * @property subscriber - The subscriber information.
  * @property ownerList - The list of owners.
  */
-export type UserResponse = {
+export declare type UserResponse = {
     utoken: string;
     loginId: string;
     loginType: string;
@@ -219,7 +219,7 @@ export type UserResponse = {
  * @property effectiveTime - The effective time in milliseconds.
  * @property expireTime - The expire time in milliseconds.
  */
-export type BalanceDetail = {
+export declare type BalanceDetail = {
     balanceInstanceId: string;
     amount: string;
     initialAmount: string;
@@ -236,7 +236,7 @@ export type BalanceDetail = {
  * @property currencyId - The currency ID.
  * @property balanceDetail - The balance detail list.
  */
-export type BalanceInfo = {
+export declare type BalanceInfo = {
     balanceType: string;
     balanceTypeName: string;
     totalAmount: string;
@@ -252,7 +252,7 @@ export type BalanceInfo = {
  * @property totalRemainAmount - The total remain amount.
  * @property currencyId - The currency ID.
  */
-export type CreditInfo = {
+export declare type CreditInfo = {
     totalCreditAmount: string;
     totalUsageAmount: string;
     totalRemainAmount: string;
@@ -265,30 +265,30 @@ export type CreditInfo = {
  * @property creditInfo - The credit information.
  * @property outstandingInfo - The outstanding information.
  */
-export type UserBalanceInfo = {
+export declare type UserBalanceInfo = {
     acctId: string;
     balanceInfo: BalanceInfo[];
     creditInfo: CreditInfo[];
     outstandingInfo: any[];
 };
 
-export type Hooks = {
+export declare type Hooks = {
     beforeRequest: (...params: any[]) => any;
     afterRequest: (...params: any[]) => any;
 };
 
-export type TTLInMs = {
+export declare type TTLInMs = {
     session: number;
     balance: number;
     freeUnit: number;
 };
 
-export type CustomerConfig = {
+export declare type CustomerConfig = {
     number: string;
     password: string;
 };
 
-export type Config = {
+export declare type Config = {
     customer: CustomerConfig;
     ttlInMs: TTLInMs;
     CacheProvider: CacheProviderInFile | CacheProviderInMemory | CacheProviderInterface;
@@ -310,7 +310,7 @@ export type Config = {
  * @property itemCode - The item code.
  * @property remainingDaysForRenewal - The remaining days for renewal.
  */
-export type FreeUnitBeanDetail = {
+export declare type FreeUnitBeanDetail = {
     initialAmount: number;
     currentAmount: number;
     measureUnit: string;
@@ -344,7 +344,7 @@ export type FreeUnitBeanDetail = {
  * @property originUnit - The origin unit.
  * @property freeUnitBeanDetailList - The list of free unit bean details.
  */
-export type FreeUnit = {
+export declare type FreeUnit = {
     tabId: string;
     freeUnitType: string;
     freeUnitTypeName: string;
@@ -363,4 +363,11 @@ export type FreeUnit = {
     originUnit: string;
     freeUnitBeanDetailList: FreeUnitBeanDetail[];
 };
+
+/**
+ * WE error class
+ */
+export declare class WeApiError {
+    constructor(message: string, code: string, data: any);
+}
 
