@@ -2,7 +2,7 @@
   "name": "we.sdk",
   "version": "0.0.3",
   "description": "providing node js interface for controlling, fetching, and modifying your account and quota on the We Telecom Egypt website \n I am shooting to make a complete \"We SDK\" for node js ",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo test",
     "start": "node index.js"
@@ -20,6 +20,7 @@
     "we",
     "sdk"
   ],
+  "types": "./types/types.d.ts",
   "author": "https://github.com/abdelrahman-tarek-0",
   "license": "ISC",
   "bugs": {
@@ -29,5 +30,8 @@
   "dependencies": {
     "axios": "^1.7.2",
     "libphonenumber-js": "^1.11.4"
+  },
+  "devDependencies": {
+    "tsd-jsdoc": "^2.5.0"
   }
 }
