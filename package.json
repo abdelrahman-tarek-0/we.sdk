@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "echo test",
-    "start": "node index.js"
+    "start": "node index.js",
+    "types": "jsdoc -t node_modules/tsd-jsdoc/dist -r lib/. -d types"
   },
   "repository": {
     "type": "git",

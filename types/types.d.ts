@@ -1,6 +1,99 @@
-declare type api = any;
+declare class WeApi {
+    /**
+     * Authenticate user with WE API.
+     * @example
+     * const session = await WeApi.userAuthenticate('02-2312-3456', 'yourPassword');
+     * @param number - A valid Egyptian landline number (e.g., 0223123456, +20223123456, 0020223123456).
+     * @param password - Your WE account password.
+     * @returns - A session object.
+     */
+    static userAuthenticate(number: string, password: string): Promise<UserResponse>;
+    /**
+     * * Get user balance
+    * provide a valid session object from userAuthenticate method
+     * @example
+     * const balance = await WeApi.getBalance(session)
+    const balance = await WeApi.getBalance(await WeApi.userAuthenticate('02-2312-3456', 'yourPassword')
+     * @returns user balance
+     */
+    static getBalance(session: {
+        uToken: string;
+        token: string;
+        account: {
+            acctId: string;
+        };
+    }): Promise<UserBalanceInfo>;
+    /**
+     * * Get user free units (your quota for the month)
+    * provide a valid session object from userAuthenticate method
+     * @example
+     * const freeUnits = await WeApi.getFreeUnits(session)
+    const freeUnits = await WeApi.getFreeUnits(await WeApi.userAuthenticate('02-2312-3456', 'yourPassword')
+     * @returns user free units
+     */
+    static getFreeUnits(session: {
+        uToken: string;
+        token: string;
+        subscriber: {
+            subscriberId: string;
+        };
+    }): Promise<FreeUnit[]>;
+}
 
-declare type CONFIG = any;
+declare class WeCachedApi {
+    constructor(config: Config);
+    /**
+     * @returns session object
+     */
+    userAuthenticate(): Promise<UserResponse>;
+    /**
+     * @returns user balance
+     */
+    getBalance(): Promise<UserBalanceInfo>;
+    /**
+     * @returns free units
+     */
+    getFreeUnits(): Promise<FreeUnit>;
+}
+
+/**
+ * Base interface for cache providers.
+ * @param path - location of the cashed file in json format
+ */
+declare interface CacheProviderInterface {
+    set(key: string, value: any): any;
+    get(key: string): any;
+    remove(key: string): this;
+    clear(): this;
+    validateKey(key: string): boolean;
+}
+
+declare interface CacheProviderInFile extends CacheProviderInterface {
+}
+
+/**
+ * @param path - location of the cashed file in json format
+ */
+declare class CacheProviderInFile implements CacheProviderInterface {
+    constructor(ttl: TTLInMs, path: string);
+    set(key: string, value: any): any;
+    get(key: string): any;
+    remove(key: string): this;
+    clear(): this;
+    validateKey(key: string): boolean;
+}
+
+declare interface CacheProviderInMemory extends CacheProviderInterface {
+}
+
+declare class CacheProviderInMemory implements CacheProviderInterface {
+    constructor(ttl: TTLInMs);
+    set(key: string, value: any): any;
+    get(key: string): any;
+    remove(key: string): this;
+    clear(): this;
+    validateKey(key: string): boolean;
+}
 
 /**
  * @property firstName - The individual's first name.
@@ -177,6 +270,52 @@ declare type UserBalanceInfo = {
     balanceInfo: BalanceInfo[];
     creditInfo: CreditInfo[];
     outstandingInfo: any[];
+};
+
+declare type Hooks = {
+    beforeRequest: (...params: any[]) => any;
+    afterRequest: (...params: any[]) => any;
+};
+
+declare type TTLInMs = {
+    session: number;
+    balance: number;
+    freeUnit: number;
+};
+
+/**
+ * @property custId - The customer ID.
+ * @property custName - The customer name.
+ * @property custGender - The customer gender.
+ * @property custCode - The customer code.
+ * @property custType - The customer type.
+ * @property custClass - The customer class.
+ * @property individualInfo - The individual's information.
+ * @property contactPersonList - The list of contact persons.
+ * @property addressInfoList - The list of addresses.
+ * @property serviceManagerInfo - The service manager information.
+ * @property bankCards - The list of bank cards.
+ */
+declare type Customer = {
+    custId: string;
+    custName: string;
+    custGender: string;
+    custCode: string;
+    custType: string;
+    custClass: string;
+    individualInfo: IndividualInfo;
+    contactPersonList: any[];
+    addressInfoList: any[];
+    serviceManagerInfo: any[];
+    bankCards: any[];
+};
+
+declare type Config = {
+    customer: Customer;
+    ttlInMs: TTLInMs;
+    CacheProvider: CacheProviderInFile | CacheProviderInMemory | CacheProviderInterface;
+    cachePath: string;
+    hooks: Hooks;
 };
 
 /**
